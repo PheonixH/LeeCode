@@ -3,13 +3,18 @@
 
 #include "pch.h"
 #include <iostream>
-
+#include <vector>
+#include "Solution.h"
 using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	std::cout << "Hello World!\n";
 	cout << "Hello LeeCode!\n";
+	int b[7] = { 1,2,3,4,5 };
+	vector<int> a(b, b + 6);
+	Solution s;
+	cout<< s.maxProfit(a);
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

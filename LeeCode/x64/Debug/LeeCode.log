@@ -1,0 +1,4 @@
+﻿  Solution.cpp
+e:\source\github\leecode\leecode\solution.cpp(63): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\source\github\leecode\leecode\solution.cpp(87): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  LeeCode.vcxproj -> E:\Source\GitHub\LeeCode\x64\Debug\LeeCode.exe
