@@ -11,10 +11,12 @@ int main()
 {
 	std::cout << "Hello World!\n";
 	cout << "Hello LeeCode!\n";
-	int b[7] = { 1,2,3,4,5 };
-	vector<int> a(b, b + 6);
+	int b[4] = { 7,8,13,15};
+	int b2[4] = { 10,8,12,20 };
+	vector<int> a(b, b + 4);
+	vector<int> a1(b2, b2 + 4);
 	Solution s;
-	cout<< s.maxProfit(a);
+	cout << s.isRectangleOverlap(a, a1);
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
