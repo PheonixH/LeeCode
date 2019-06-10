@@ -31,5 +31,7 @@ public:
 	bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2);
 	//223
 	int computeArea(int A, int B, int C, int D, int E, int F, int G, int H);
+	//636
+	vector<int> exclusiveTime(int n, vector<string>& logs);
 };
 

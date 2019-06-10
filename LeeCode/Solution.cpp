@@ -235,3 +235,34 @@ int Solution::computeArea(int A, int B, int C, int D, int E, int F, int G, int H
 	int s3 = w * h;
 	return s1 + s2 - s3;
 }
+
+//636
+//执行用时 : 128 ms, 在Exclusive Time of Functions的C++提交中击败了8.86% 的用户
+//内存消耗: 20.2 MB, 在Exclusive Time of Functions的C++提交中击败了7.69% 的用户
+vector<int> Solution::exclusiveTime(int n, vector<string>& logs) {
+	vector<int> res(n, 0);
+	stack<pair<int, int>> sta;
+	for (int i = 0; i < logs.size(); ++i) {
+		istringstream is(logs[i]);
+		vector<string> vecS;
+		string s;
+		while (getline(is, s, ':')) {
+			vecS.push_back(s);
+		}
+		int id = stoi(vecS[0]);
+		int time = stoi(vecS[2]);
+		if (vecS[1] == "start") {
+			sta.push(make_pair(id, time));
+		}
+		else {
+			pair<int, int> temp = sta.top();
+			sta.pop();
+			int time_diff = time - temp.second + 1;
+			res[temp.first] += time_diff;
+			if (!sta.empty()) {
+				res[sta.top().first] -= time_diff;
+			}
+		}
+	}
+	return res;
+}
