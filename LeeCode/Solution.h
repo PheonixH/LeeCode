@@ -33,5 +33,33 @@ public:
 	int computeArea(int A, int B, int C, int D, int E, int F, int G, int H);
 	//636
 	vector<int> exclusiveTime(int n, vector<string>& logs);
+	//674
+	int findLengthOfLCIS(vector<int>& nums);
+	//668
+	int findKthNumber(int m, int n, int k);
+	//371
+	int getSum(int a, int b);
+	//344
+	void reverseString(vector<char>& s);
+	//203
+	ListNode* removeElements(ListNode* head, int val);
+	//160
+	ListNode* getIntersectionNode(ListNode* headA, ListNode* headB);
+	//448
+	vector<int> findDisappearedNumbers(vector<int>& nums);
+	//216
+	vector<vector<int>> combinationSum3(int k, int n);
+	void func(int k, int n, int begin, vector<int>& tmp, vector<vector<int>>& res);
+	//412
+	vector<string> fizzBuzz(int n);
+	//58
+	int lengthOfLastWord(string s);
+	//119
+	vector<int> getRow(int rowIndex);
+	//26
+	int Solution::removeDuplicates(vector<int>& nums);
+	//780
+	bool reachingPoints(int sx, int sy, int tx, int ty);
+	
 };
 
