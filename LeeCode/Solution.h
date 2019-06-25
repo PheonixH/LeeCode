@@ -60,6 +60,9 @@ public:
 	int Solution::removeDuplicates(vector<int>& nums);
 	//780
 	bool reachingPoints(int sx, int sy, int tx, int ty);
-	
+	//27
+	int removeElement(vector<int>& nums, int val);
+	//28
+	int strStr(string haystack, string needle);
 };
 

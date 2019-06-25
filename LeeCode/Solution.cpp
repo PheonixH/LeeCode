@@ -664,3 +664,52 @@ vector<int> Solution::getRow(int rowIndex) {
 	}
 	return v;
 }
+
+//27
+//执行用时 :4 ms, 在所有 C++ 提交中击败了96.01% 的用户
+//内存消耗:8.5 MB, 在所有 C++ 提交中击败了86.79 % 的用户
+int Solution::removeElement(vector<int>& nums, int val) {
+	int i = 0, j = 0, len = nums.size();
+	for (; j < len;j++) {
+		if (nums[j] == val) {
+			continue;
+		}
+		else {
+			nums[i] = nums[j];
+			i++;
+		}
+	}
+	return i;
+}
+
+//28
+//执行用时 :12 ms, 在所有 C++ 提交中击败了62.53% 的用户
+//内存消耗:8.9 MB, 在所有 C++ 提交中击败了93.54 % 的用户
+int Solution::strStr(string haystack, string needle) {
+	// write your code here 
+	if (needle.size() == 0) {
+		return 0;
+	}
+	if (needle.size() > haystack.size()) {
+		return -1;
+	}
+	//needle 指针
+	int j = 0;
+	int i = 0;
+	for (i = 0; i < haystack.size(); ++i) {
+		if (j == needle.size()) {//判断完成
+			return i - needle.size();
+		}
+		if (haystack[i] == needle[j]) {
+			j++;
+		}
+		else {
+			i -= j;
+			j = 0;
+		}
+	}
+	if (j == needle.size()) {//判断完成
+		return i - needle.size();
+	}
+	return -1;
+}
