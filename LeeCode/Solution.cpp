@@ -713,3 +713,273 @@ int Solution::strStr(string haystack, string needle) {
 	}
 	return -1;
 }
+
+//31
+//执行用时 :16 ms, 在所有 C++ 提交中击败了73.16% 的用户
+//内存消耗:8.5 MB, 在所有 C++ 提交中击败了91.76 % 的用户
+void Solution::nextPermutation(vector<int>& nums) {
+	int len = nums.size();
+	if (len <= 1) {
+		return;
+	}
+	int x = len - 1;
+	for (; x > 0; x--) {
+		if (nums[x] > nums[x - 1]) {
+			break;
+		}
+	}
+	if (x == len - 1) {
+		revoltArray(nums, x-1, len - 1);
+		return;
+	}
+	revoltArray(nums, x, len - 1);
+	if (x != 0) {
+		int y = x - 1;
+		for (; x < len; x++) {
+			if (nums[x] > nums[y]) {
+				nums[x] = nums[x] ^ nums[y];
+				nums[y] = nums[x] ^ nums[y];
+				nums[x] = nums[x] ^ nums[y];
+				break;
+			}
+		}
+	}
+	return;
+}
+void Solution::revoltArray(vector<int>& nums, int b, int e) {
+	while (b < e)
+	{
+		nums[b] = nums[b] ^ nums[e];
+		nums[e] = nums[b] ^ nums[e];
+		nums[b] = nums[b] ^ nums[e];
+		b++;
+		e--;
+	}
+	return;
+}
+
+//41
+//执行用时 :0 ms, 在所有 C++ 提交中击败了100.00% 的用户
+//内存消耗:8.8 MB, 在所有 C++ 提交中击败了71.51 % 的用户
+int Solution::firstMissingPositive(vector<int>& nums) {
+	int len = nums.size();
+	quickSort(nums, 0, len-1);
+	int x = 1, i = 0;
+	bool isPositive = false;
+	while (i<len)
+	{
+		if (nums[i] == x&&!isPositive) {
+			isPositive = true;
+			x++;
+		}
+		else if (isPositive) {
+			if (x < nums[i]) {
+				return x;
+			}
+			else if (x == nums[i]) {
+				x++;
+			}
+		}
+		i++;
+	}
+	return x;
+}
+
+//41
+/*提供两种思路：
+
+	hash 计数：需要额外的空间。所有出现的数字，hash 值 + 1。第二次从 1 开始查找 hash 表，找不到就是它了。但是这种方案不符合题意，而且 hash 计数这个方案效率也不是最优的。
+	假设原始数组为 A。先构造一个临时数组 tmp，初始化为 0，大小为A.size(). 遍历 A，把 A[i] 复制到 tmp[A[i]-1] 的位置。如果 A[i] - 1 超过了 tmp 的范围，就直接扔掉。如此一来，tmp[0...size) 中就保存了一部分 A 的值。然后从位置 0 开始检查 tmp，如果发现该位置的值和索引号不匹配，就说明找到了缺失的数了。
+
+注意上面的方案一，没办法优化成 in-place 算法，但是方案二可以。方案二，可以不使用 tmp 数组，直接在原始数组中操作，把每个数放到正确的位置。
+
+我们使用一种 “座位交换法" 来达到 in-place 的目的：
+
+	从第一个位置开始，让座位上的乘客走到自己应该坐的位置，并让该位置的人坐到第一个位置。一直进行这样的操作，直到第一个位置的人坐到自己位置。不过有时候我们知道，有的人总喜欢逃票。因此终止条件就是，一旦发现第一个位置的人逃票（票号 <= 0，或 >= 最大座位号)，则终止交换。
+	对第二到N个位置做相同的操作。
+*/
+//执行用时 :12 ms, 在所有 C++ 提交中击败了26.02% 的用户
+//内存消耗:8.7 MB, 在所有 C++ 提交中击败了76.49 % 的用户
+int firstMissingPositive(vector<int>& nums) {
+	for (int i = 0; i < nums.size(); ++i) {
+		while (0 < nums[i] && nums[i] <= nums.size() && nums[i] != nums[nums[i] - 1]) {
+			swap(nums[i], nums[nums[i] - 1]);
+		}
+	}
+	for (int i = 0; i < nums.size(); ++i) {
+		if (nums[i] != i + 1) {
+			return i + 1;
+		}
+	}
+	return nums.size() + 1;
+}
+
+//57
+//执行用时 :1460 ms, 在所有 C++ 提交中击败了5.12% 的用户
+//内存消耗:12.3 MB, 在所有 C++ 提交中击败了5.23 % 的用户
+vector<vector<int>> Solution::insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+	if (intervals.size() == 0) {
+		intervals.push_back(newInterval);
+		return intervals;
+	}
+	bool isAdd = false;
+	vector<vector<int>> ::iterator  it = intervals.begin();
+	for (; it != intervals.end();) {
+		vector<int> &vec = *it;
+		if (vec[1] < newInterval[0])
+		{
+			++it;
+			continue;
+		}
+		if (vec[0] < newInterval[0]) {
+			newInterval[0] = vec[0];
+			vec[0] = -100;
+		}
+		if (vec[0]<=newInterval[1]&&vec[1] > newInterval[1]) {
+			newInterval[1] = vec[1];
+			vec[0] = -100;
+		}
+		if (vec[0] >= newInterval[0] && vec[1] <= newInterval[1]) {
+			vec[0] = -100;
+		}
+		if (vec[0] > newInterval[1]) {
+			it = intervals.insert(it, newInterval);
+			isAdd = true;
+			break;
+		}
+		if (vec[0] == -100) {
+			it = intervals.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+	if (!isAdd) {
+		intervals.push_back(newInterval);
+	}
+	return intervals;
+}
+
+//57
+//执行用时 :20 ms, 在所有 C++ 提交中击败了94.73% 的用户
+//内存消耗:12.4 MB, 在所有 C++ 提交中击败了5.23 % 的用户
+vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+	if (intervals.size() == 0)
+	{
+		intervals.push_back(newInterval);
+		return intervals;
+	}
+
+	int N = intervals.size();
+	for (vector<vector<int>>::iterator iter = intervals.begin(); iter != intervals.end(); iter++)
+	{
+		if ((*iter)[0] <= newInterval[0] && (*iter)[1] >= newInterval[1])
+		{
+			return intervals;
+		}
+		else if ((*iter)[0] >= newInterval[0] && (*iter)[0] <= newInterval[1])
+		{
+			(*iter)[0] = newInterval[0];
+			(*iter)[1] = max((*iter)[1], newInterval[1]);
+			vector<vector<int>>::iterator temp = iter;
+			int index = 0;
+			++temp;
+			bool flag = true;
+			while (temp != intervals.end() && (*temp)[0] <= newInterval[1])
+			{
+				index++;
+				if ((*temp)[1] <= newInterval[1])
+				{
+					temp++;
+				}
+				else if ((*temp)[1] >= newInterval[1])
+				{
+					flag = false;
+					(*iter)[1] = (*temp)[1];
+					break;
+				}
+			}
+			++iter;
+			intervals.erase(iter, iter + index);
+			return intervals;
+		}
+		else if ((*iter)[0] <= newInterval[0] && (*iter)[1] >= newInterval[0] && (*iter)[1] < newInterval[1])
+		{
+			cout << "fuck" << endl;
+			vector<vector<int>>::iterator temp = iter;
+			temp++;
+			(*iter)[1] = newInterval[1];
+			int index = 0;
+			while (temp != intervals.end() && (*temp)[0] <= newInterval[1])
+			{
+				index++;
+				if ((*temp)[1] <= newInterval[1])
+				{
+					temp++;
+				}
+				else if ((*temp)[1] >= newInterval[1])
+				{
+					(*iter)[1] = (*temp)[1];
+					break;
+				}
+			}
+			iter++;
+			intervals.erase(iter, iter + index);
+			return intervals;
+		}
+		else if ((*iter)[0] > newInterval[1])
+		{
+			intervals.insert(iter, newInterval);
+			return intervals;
+		}
+	}
+	intervals.push_back(newInterval);
+
+	return intervals;
+}
+
+//542
+/*
+这题的dp办法其实是最最简洁的。对于每个点，值为0距离为0，
+值不为0，则值为上下左右点最小的那个加1，我第一遍写的时候其实
+想到了这个方法，但是不知道没有计算出来的点如何处理。查资料后
+发现可以用两遍扫描法解决问题。
+
+## 第一遍扫描左边和上面的点，取最小值加1
+## 第二遍倒过来从右下角开始扫描，取右边和下面点的最小值加1
+
+##易错点:初始化为INT_MAX
+##分析：假如一个3*3的矩阵，只有右下角为0，其余为1。在第一遍
+		扫描的过程中，[1,1]点左上都是INT_MAX，加1的过程会溢出，
+		所以初始化为INT_MAX-1，不用担心溢出，取最小值永远也达不到
+		INT_MAX
+
+*/
+//执行用时 :256 ms, 在所有 C++ 提交中击败了96.91% 的用户
+//内存消耗:20.7 MB, 在所有 C++ 提交中击败了97.31 % 的用户
+vector<vector<int>> Solution::updateMatrix(vector<vector<int>>& matrix) {
+	int m = matrix.size(), n = matrix[0].size();
+	vector<vector<int>> res = matrix;
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			if (res[i][j]) res[i][j] = INT_MAX - 1;
+		}
+	}
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			if (res[i][j]) {
+				if (i > 0) res[i][j] = min(res[i][j], res[i - 1][j] + 1);
+				if (j > 0) res[i][j] = min(res[i][j], res[i][j - 1] + 1);
+			}
+		}
+	}
+	for (int i = m - 1; i >= 0; i--) {
+		for (int j = n - 1; j >= 0; j--) {
+			if (res[i][j]) {
+				if (i < m - 1) res[i][j] = min(res[i][j], res[i + 1][j] + 1);
+				if (j < n - 1) res[i][j] = min(res[i][j], res[i][j + 1] + 1);
+			}
+		}
+	}
+	return res;
+}

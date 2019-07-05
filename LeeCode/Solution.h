@@ -3,6 +3,11 @@
 #include <math.h>
 #include <Windows.h>
 #include <vector>
+#include <string>
+#include <stack>
+#include <iostream>
+#include <sstream>
+#include "ListNode.h"
 using namespace std;
 
 class Solution
@@ -57,12 +62,21 @@ public:
 	//119
 	vector<int> getRow(int rowIndex);
 	//26
-	int Solution::removeDuplicates(vector<int>& nums);
+	int removeDuplicates(vector<int>& nums);
 	//780
 	bool reachingPoints(int sx, int sy, int tx, int ty);
 	//27
 	int removeElement(vector<int>& nums, int val);
 	//28
 	int strStr(string haystack, string needle);
+	//31
+	void nextPermutation(vector<int>& nums);
+	void revoltArray(vector<int>& nums, int b, int e);
+	//41
+	int firstMissingPositive(vector<int>& nums);
+	//57
+	vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval);
+	//542
+	vector<vector<int>> updateMatrix(vector<vector<int>>& matrix);
 };
 
