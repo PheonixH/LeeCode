@@ -7,6 +7,7 @@
 #include <stack>
 #include <iostream>
 #include <sstream>
+#include <set>
 #include "ListNode.h"
 using namespace std;
 
@@ -78,5 +79,17 @@ public:
 	vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval);
 	//542
 	vector<vector<int>> updateMatrix(vector<vector<int>>& matrix);
+	//495
+	int findPoisonedDuration(vector<int>& timeSeries, int duration);
+	//747
+	int dominantIndex(vector<int>& nums);
+	//1052
+	int maxSatisfied(vector<int>& customers, vector<int>& grumpy, int X);
+	//1011
+	int shipWithinDays(vector<int>& weights, int D);
+	//945
+	int minIncrementForUnique(vector<int>& A);
+	//84
+	int largestRectangleArea(vector<int>& heights);
 };
 

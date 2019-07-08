@@ -983,3 +983,186 @@ vector<vector<int>> Solution::updateMatrix(vector<vector<int>>& matrix) {
 	}
 	return res;
 }
+
+//495
+//执行用时 :60 ms, 在所有 C++ 提交中击败了84.73% 的用户
+//内存消耗:10.6 MB, 在所有 C++ 提交中击败了100.00 % 的用户
+int Solution::findPoisonedDuration(vector<int>& timeSeries, int duration) {
+	if (duration <= 0) {
+		return 0;
+	}
+	int len = timeSeries.size();
+	if (len == 0) {
+		return 0;
+	}
+	int res = 0, time = timeSeries[0];
+	for (int vec : timeSeries) {
+		if (time + duration <= vec) {
+			res += duration;
+		}
+		else {
+			res += vec - time;
+		}
+		time = vec;
+	}
+	res += duration;
+	return res;
+}
+
+//747
+//执行用时 :8 ms, 在所有 C++ 提交中击败了72.14% 的用户
+//内存消耗:8.3 MB, 在所有 C++ 提交中击败了85.06 % 的用户
+int Solution::dominantIndex(vector<int>& nums) {
+	int len = nums.size();
+	if (len == 1) {
+		return 0;
+	}
+	int max = 0, smax = 0;
+	if(nums[0]>nums[1]){
+		max = 0;
+		smax = 1;
+	}
+	else{
+		max = 1;
+		smax = 0;
+	}
+	for (int i = 2; i < len; i++) {
+		if (nums[max] < nums[i]) {
+			smax = max;
+			max = i;
+		}
+		else if(nums[smax] < nums[i])
+		{
+			smax = i;
+		}
+	}
+	if (nums[max] >= nums[smax] * 2) {
+		return max;
+	}
+	else {
+		return -1;
+	}
+}
+//1052
+//执行用时 :68 ms, 在所有 C++ 提交中击败了41.44% 的用户
+//内存消耗:11.9 MB, 在所有 C++ 提交中击败了100.00 % 的用户
+int Solution::maxSatisfied(vector<int>& customers, vector<int>& grumpy, int X) {
+	int len = grumpy.size();
+	int* satisfied = new int[len - X+1]();
+	
+	int sum = 0;
+	for (int i = 0; i < X&&i<len; i++) {
+		if (grumpy[i] == 1) {
+			satisfied[0] += customers[i];
+			continue;
+		}
+		sum += customers[i];
+	}
+	int q = satisfied[0];
+	for (int i = X; i < len; i++) {
+		int t = grumpy[i] == 0 ? 0 : customers[i];
+		int p = grumpy[i - X] == 0 ? 0 : customers[i - X];
+		q = q + t - p;
+		satisfied[i - X + 1] = max(satisfied[i - X], q);
+		sum = grumpy[i] == 0 ? sum + customers[i] : sum;
+	}
+	return sum + satisfied[len - X];
+}
+
+//1011
+//执行用时 :52 ms, 在所有 C++ 提交中击败了97.81% 的用户
+//内存消耗:11.8 MB, 在所有 C++ 提交中击败了76.36 % 的用户
+int Solution::shipWithinDays(vector<int>& weights, int D) {
+	int l = 0, r = 20000;//随意取的大数
+	int n = weights.size();
+	int ans = INT_MAX;
+	while (l < r)//二分答案
+	{
+		int mid = (l + r) / 2;
+		int s = 0;
+		int day = 0;
+		for (int i = 0; i < n; i++)
+		{
+			if (weights[i] > mid)//注意这里 不然会超时
+			{
+				day = D + 1;
+				break;
+			}
+			s += weights[i];
+			if (s > mid)
+			{
+				s = 0;
+				i--;
+				day++;
+			}
+		}
+		if (s > 0)day++;
+		if (day <= D)
+		{
+			ans = min(ans, mid);
+			r = mid;
+		}
+		else l = mid + 1;
+	}
+	return ans;
+} 
+
+//945
+//执行用时 :64 ms, 在所有 C++ 提交中击败了99.13% 的用户
+//内存消耗:11.9 MB, 在所有 C++ 提交中击败了87.93 % 的用户
+int Solution::minIncrementForUnique(vector<int>& A) {
+	int n[50000] = { 0 };
+	int len = A.size();
+	for (int i = 0; i < len; i++) {
+		n[A[i]]++;
+	}
+	int move = 0;
+	for (int i = 0; i < 50000; i++) {
+		if (n[i] <= 1) {
+			continue;
+		}
+		move += n[i] - 1;
+		n[i + 1] += n[i] - 1;
+		n[i] = 1;
+	}
+	return move;
+}
+
+//84
+//执行用时 :1332 ms, 在所有 C++ 提交中击败了5.05% 的用户
+//内存消耗:10 MB, 在所有 C++ 提交中击败了75.96 % 的用户
+int Solution::largestRectangleArea(vector<int>& heights) {
+	int len = heights.size();
+	if (len == 0)
+	{
+		return 0;
+	}
+	int* sum = new int[len];
+	int m = 0;
+	for (int i = 0; i < len; i++) {
+		sum[i] = heights[i];
+	}
+	for (int i = 0; i < len; i++) {
+		bool b = false;
+		int t = i - 1;
+		while (t >= 0 && heights[i] <= heights[t])
+		{
+			if (heights[i] == heights[t]) {
+				sum[i] = sum[t];
+				b = true;
+				break;
+			}
+			sum[i] = sum[i] + heights[i];
+			t--;
+		}
+		t = i + 1;
+		while (!b&&t < len && heights[i] <= heights[t])
+		{
+			sum[i] = sum[i] + heights[i];
+			t++;
+		}
+		m = max(m, sum[i]);
+	}
+	return m;
+}
+
