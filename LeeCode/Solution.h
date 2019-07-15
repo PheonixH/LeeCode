@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <set>
+#include <map>
 #include "ListNode.h"
 using namespace std;
 
@@ -91,5 +92,15 @@ public:
 	int minIncrementForUnique(vector<int>& A);
 	//84
 	int largestRectangleArea(vector<int>& heights);
+	//229
+	vector<int> majorityElement(vector<int>& nums);
+	//724
+	int pivotIndex(vector<int>& nums);
+	//1013
+	bool canThreePartsEqualSum(vector<int>& A);
+	//941
+	bool validMountainArray(vector<int>& A);
+	//80
+	int removeDuplicates80(vector<int>& nums);
 };
 

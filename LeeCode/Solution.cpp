@@ -1166,3 +1166,175 @@ int Solution::largestRectangleArea(vector<int>& heights) {
 	return m;
 }
 
+//229
+//执行用时 :28 ms, 在所有 C++ 提交中击败了29.79% 的用户
+//内存消耗:10.5 MB, 在所有 C++ 提交中击败了82.05 % 的用户
+vector<int> Solution::majorityElement(vector<int>& nums) {
+	int n = nums.size();
+	int candidate1 = 0, candidate2 = 0, cnt1 = 0, cnt2 = 0;
+	for (int num : nums) 
+	{ 
+		//按如下的顺序保证了两个候选人不会一样 
+		//给候选人投票 
+		if(num==candidate1) ++cnt1; 
+		else if(num==candidate2) ++cnt2; 
+		//cnt=0表示还没有候选人 
+		else if(!cnt1) cnt1=1,candidate1=num; 
+		else if(!cnt2) cnt2=1,candidate2=num; 
+		//不是候选人则减票 
+		else --cnt1,--cnt2; 
+	} 
+	cnt1=cnt2=0; 
+	for(int num:nums) 
+	{ 
+		if(num==candidate1) ++cnt1; 
+		else if(num==candidate2) ++cnt2; 
+	} 
+	vector<int> ans; 
+	if(cnt1>n/3) ans.push_back(candidate1);
+	if(cnt2>n/3) ans.push_back(candidate2);
+	return ans;
+}
+
+//724
+//执执行用时 :28 ms, 在所有 C++ 提交中击败了89.51% 的用户
+//内存消耗:9.9 MB, 在所有 C++ 提交中击败了82.67 % 的用户
+int Solution::pivotIndex(vector<int>& nums) {
+	int sumb = 0, sume = 0, len = nums.size();
+	if (len == 0) {
+		return -1;
+	}
+	if (len == 1) {
+		return 0;
+	}
+	for (int t : nums) {
+		sume += t;
+	}
+	sume -= nums[0];
+	for (int i = 1; i < len; i++) {
+		if (sumb == sume) {
+			return i-1;
+		}
+		sume -= nums[i];
+		sumb += nums[i-1];
+	}
+	if (sumb == sume) {
+		return len-1;
+	}
+	return -1;
+}
+
+//1013
+//执行用时 :120 ms, 在所有 C++ 提交中击败了9.97% 的用户
+//内存消耗:12.6 MB, 在所有 C++ 提交中击败了26.79 % 的用户
+bool Solution::canThreePartsEqualSum(vector<int>& A) {
+	int sum = 0, len = A.size();
+	for (int i : A) {
+		sum += i;
+	}
+	if (sum / 3 * 3 != sum) {
+		return false;
+	}
+	int key = sum / 3;
+	int i = 0, j = len - 1, ti = 0, tj = 0, tii = 0;
+	while (i<=j)
+	{
+		if (ti!=key)
+		{
+			ti += A[i++];
+		}
+		else if(tii != key)
+		{
+			tii += A[i++];
+		}
+		if (tj != key) {
+			tj += A[j--];
+		}
+		if (tii == key && tj == key) {
+			int t = 0;
+			for (int k = i; k <= j; k++) {
+				t += A[k];
+			}
+			return t == 0;
+		}
+	}
+	return tii == key&&tj==key;
+}
+
+//941
+//执行用时 :40 ms, 在所有 C++ 提交中击败了76.85% 的用户
+//内存消耗:10.3 MB, 在所有 C++ 提交中击败了82.05 % 的用户
+bool validMountainArray(vector<int>& A) {
+	int key = 0, len = A.size();
+	if (len < 3|| A[0]>A[1]) {
+		return false;
+	}
+	for (int i = 1; i < len;i++) {
+		if (A[i] == A[i - 1]) {
+			return false;
+		}
+		else if (0 == key && A[i] > A[i - 1]) {
+			continue;
+		}
+		else if (1 == key && A[i] < A[i - 1]) {
+			continue;
+		}
+		else if (0 == key && A[i] < A[i - 1]) {
+			key = 1;
+			continue;
+		}
+		else {
+			return false;
+		}
+	}
+	return key == 1;
+}
+
+//941
+//执行用时 :36 ms, 在所有 C++ 提交中击败了91.61% 的用户
+//内存消耗:10.4 MB, 在所有 C++ 提交中击败了77.78 % 的用户
+bool Solution::validMountainArray(vector<int>& A) {
+	int key = 0, len = A.size();
+	if (len < 3) {
+		return false;
+	}
+	int i = 0, j = len-1;
+	while (i+1<len&&A[i] < A[i + 1]) {
+		i++;
+	}
+	if (i == 0) {
+		return false;
+	}
+	while (j>0&&A[j] < A[j - 1]) {
+		j--;
+	}
+	if (j == len - 1) {
+		return false;
+	}
+	return i == j;
+}
+
+//80
+//执行用时 :16 ms, 在所有 C++ 提交中击败了94.94% 的用户
+//内存消耗:8.6 MB, 在所有 C++ 提交中击败了93.30 % 的用户
+int Solution::removeDuplicates80(vector<int>& nums) {
+	int len = nums.size();
+	if (len <= 2) {
+		return len;
+	}
+	int reallyn = nums[0], needat = 1, num = 1;
+	for (int i = 1; i < len; i++) {
+		if (nums[i] == reallyn) {
+			num++;
+			if (num <= 2) {
+				nums[needat++] = nums[i];
+			}
+		}
+		else {
+			num = 1;
+			nums[needat++] = nums[i];
+			reallyn = nums[i];
+		}
+	}
+	return needat;
+}
